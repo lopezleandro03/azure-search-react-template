@@ -6,6 +6,6 @@
     "SearchApiKey": "",
     "SearchServiceName": "",
     "SearchIndexName": "",
-    "SearchFacets": ""
+    "SearchFacets": "authors*,language_code"
   }
 }
