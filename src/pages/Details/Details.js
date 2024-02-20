@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
-import Rating from '@material-ui/lab/Rating';
+// import Rating from '@material-ui/lab/Rating';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from 'axios';
 
@@ -46,7 +46,7 @@ export default function Details() {
           <p className="card-text">{document.description}</p>
           <p className="card-text">Categogy {document.taxonomy}</p>
           {/* <Rating name="half-rating-read" value={parseInt(document.average_rating)} precision={0.1} readOnly></Rating> */}
-          <p className="card-text">{document.metaData} Ratings</p>
+          <p className="card-text">{document.metaData} Enriched data</p>
         </div>
       );
     }
