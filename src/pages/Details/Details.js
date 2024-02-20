@@ -41,7 +41,7 @@ export default function Details() {
       detailsBody = (
         <div className="card-body">
           <h5 className="card-title">{document.title}</h5>
-          <img className="image" src={document.image_url} alt="Product image"></img>
+          <img className="image" src={document.image_url} alt="Product"></img>
           {/* <p className="card-text">{document.authors?.join('; ')} - {document.original_publication_year}</p> */}
           <p className="card-text">{document.description}</p>
           <p className="card-text">Categogy {document.taxonomy}</p>
