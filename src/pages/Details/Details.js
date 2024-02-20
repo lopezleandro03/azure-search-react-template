@@ -41,11 +41,12 @@ export default function Details() {
       detailsBody = (
         <div className="card-body">
           <h5 className="card-title">{document.title}</h5>
-          <img className="image" src={document.image_url} alt="Book cover"></img>
-          <p className="card-text">{document.authors?.join('; ')} - {document.original_publication_year}</p>
-          <p className="card-text">ISBN {document.isbn}</p>
-          <Rating name="half-rating-read" value={parseInt(document.average_rating)} precision={0.1} readOnly></Rating>
-          <p className="card-text">{document.ratings_count} Ratings</p>
+          <img className="image" src={document.image_url} alt="Product image"></img>
+          {/* <p className="card-text">{document.authors?.join('; ')} - {document.original_publication_year}</p> */}
+          <p className="card-text">{document.description}</p>
+          <p className="card-text">Categogy {document.taxonomy}</p>
+          {/* <Rating name="half-rating-read" value={parseInt(document.average_rating)} precision={0.1} readOnly></Rating> */}
+          <p className="card-text">{document.metaData} Ratings</p>
         </div>
       );
     }
