@@ -48,6 +48,38 @@ const readFacets = (facetString) => {
     return output;
 }
 
+
+// Function to generate embeddings using Azure Open AI  
+async function generateQueryEmbedding(input) {  
+    // Set Azure OpenAI API parameters from environment variables  
+    const apiKey = process.env.AZURE_OPENAI_API_KEY;  
+    const apiBase = `https://${process.env.AZURE_OPENAI_SERVICE_NAME}.openai.azure.com`;  
+    const apiVersion = process.env.AZURE_OPENAI_API_VERSION;  
+    const deploymentName = process.env.AZURE_OPENAI_DEPLOYMENT_NAME;  
+    
+    try {  
+      const response = await axios.post(  
+        `${apiBase}/openai/deployments/${deploymentName}/embeddings?api-version=${apiVersion}`,  
+        {  
+          input,  
+          engine: "text-embedding-ada-002",  
+        },  
+        {  
+          headers: {  
+            "Content-Type": "application/json",  
+            "api-key": apiKey,  
+          },  
+        }  
+      );  
+    
+      const embedding = response.data.data[0].embedding;  
+      return embedding;  
+    } catch (error) {  
+      console.error("Error generating query embedding: ", error.message);  
+      throw error;  
+    } 
+} 
+
 module.exports = async function (context, req) {
 
     //context.log(req);
@@ -60,12 +92,6 @@ module.exports = async function (context, req) {
         const filters = (req.query.filters || (req.body && req.body.filters));
         const facets = readFacets(process.env["SearchFacets"]);
         
-
-        // If search term is empty, search everything
-        if (!q || q === "") {
-            q = "*";
-        }
-
         // Creating SearchOptions for query
         let searchOptions = {
             top: top,
@@ -74,6 +100,20 @@ module.exports = async function (context, req) {
             facets: Object.keys(facets),
             filter: createFilterExpression(filters, facets)
         };
+
+        // If search term is empty, search everything
+        if (!q || q === "") {
+            q = "*";
+        }
+        else {
+            // Create embedding of the search query
+            const queryEmbedding = await generateQueryEmbedding(q);
+            searchOptions.vector = {  
+                value: queryEmbedding,  
+                kNearestNeighborsCount: top,  
+                fields: ["titleVector", "descriptionVector"],  
+            }
+        }
 
         // Sending the search request
         const searchResults = await client.search(q, searchOptions);
