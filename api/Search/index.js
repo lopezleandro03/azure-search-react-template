@@ -1,4 +1,5 @@
 const { SearchClient, AzureKeyCredential } = require("@azure/search-documents");
+const axios = require("axios");
 
 const indexName = process.env["SearchIndexName"];
 const apiKey = process.env["SearchApiKey"];
